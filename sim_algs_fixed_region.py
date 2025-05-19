@@ -1053,7 +1053,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
                 bdl1.add_cross_bdl(new_pt, bdl2) #add crossover info for both bundles
                 bdl2_mts = bdl2.mt_overlap(mt_list,new_pt,dists,mt2_n = mt_idx2)
                 # bdl2_mts.append(mt2.number)
-                bdl1.cross_mts.append(bdl2_mts) #add overlaping mts
+                bdl1.cross_mts.append(bdl2_mts) #add overlapping mts
                 #possibly many overlaps mt1
                 bdl2.add_cross_bdl(new_pt, bdl1)
                 bdl2.cross_mts.append([mt1.number]) #only mt1 crossed mt2
@@ -1751,7 +1751,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
     elif policy =='disap': #mt has disappeared
             mt_idx1 = idxs
             mt1 = mt_list[mt_idx1]
-            mt1.exist = False #has dissapeared
+            mt1.exist = False #has disapeared
             if mt1.bdl is not None: #if mt1 was part of bdl, erase from bdl
                 bdl = bdl_list[mt1.bdl]
                 if mt1.from_bdry and not mt1.tread: #if it's an extension, must update previous MT
@@ -1795,7 +1795,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
     elif policy =='disap_tread': #mt has disappeared, tread
             mt_idx1 = idxs
             mt1 = mt_list[mt_idx1]
-            mt1.exist = False #has dissapeared
+            mt1.exist = False #has disapeared
             if mt1.bdl is not None: #if mt1 was part of bdl, erase from bdl
                 bdl = bdl_list[mt1.bdl]
                 if mt1.hit_bdry: #if it has extension, must update extension MT

@@ -10,7 +10,8 @@ All other scripts remain with the same name, but will have new functions for thi
 Simulation parameters are GLOBAL imported from parameters.py.
 """
 import numpy as np
-np.set_printoptions(legacy='1.25') #print numbers the normal way
+if np.lib.NumpyVersion(np.__version__) >= np.lib.NumpyVersion('2.2.2'):
+    np.set_printoptions(legacy='1.25') #print numbers the 'normal' way
 import itertools as it
 from comparison_fns import event, compare, inter_r_bdry2, dist, mt, which_region, bundle, deflect_angle, region_traj, bdl_exist, branch_geo, branch, earliest_event
 from comparison_fns import sort_and_find_events, cat_rate, add_pi
@@ -34,7 +35,6 @@ import pickle
 from multiprocessing import current_process
 import sys
 from inspect import currentframe #debugging
-
 def get_linenumber():
     cf = currentframe()
     return cf.f_back.f_lineno

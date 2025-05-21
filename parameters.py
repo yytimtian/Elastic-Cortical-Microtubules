@@ -103,8 +103,8 @@ else:
     
     r_c0 = 0.0045 #cat rate 1/s
     r_r0 = 0.007 #rescue rate 1/s
-    r_c = 2/3*r_c0*R/v_g #scaled cat rate
-    r_r = 2/3*r_r0*R/v_g #scaled rescue rate
+    r_c = r_c0*R/v_g #scaled cat rate
+    r_r = r_r0*R/v_g #scaled rescue rate
     
     r_n0 = 0.001 #nucleation rate 1/(s*um^2)    
     r_n = r_n0*R**3/v_g #nucleation rate

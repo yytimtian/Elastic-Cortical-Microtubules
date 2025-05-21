@@ -53,6 +53,7 @@ if no_bdl_id:
     assert not angle_dep_cat
     
 if plant == 'arth':
+    #For testing purposes only. Uses 3 state model. Coded before LDD mode, I need to check if it's still consistent.
     #reference parameters - set to 1
     R = 5 #radius in um
     v_g = 6.5/60 #0.08 #growth speed in um/s

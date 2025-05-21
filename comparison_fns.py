@@ -3753,9 +3753,8 @@ def determine_branch_compass2(br_th, mt_angle, ref_th):
 #load in lookup table for sampling ellipse distr
 from inverse_transform import make_ellipse_table
 make_ellipse_table()
-pick_in = open('ellipse_table.pickle','rb')
-lookup_table = pickle.load(pick_in)
-pick_in.close()
+with open('ellipse_table.pickle', 'rb') as pick_in:
+    lookup_table = pickle.load(pick_in)
 
 dy_lookup = lookup_table['dtheta']
 theta_inverse = lookup_table['theta_inverse']

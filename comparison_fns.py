@@ -114,11 +114,11 @@ class mt:
         self.number = number
         self.pseudo_bdry = False
         self.bdl = None #bundle number if exists
-        self.exist = True #whether MT has disapeared due to shrinking
+        self.exist = True #whether MT has disappeared due to shrinking
         self.seg = [] #nx2 array to store previous segment points
         self.traj = [] #trajectories each seg is on
         self.seg_dist = [] #n-1 array to store distance. ith is dist. from seg[i] to seg[i+1]
-        self.angle = []# n array angles of trajectories correpsonding to seg points
+        self.angle = []# n array angles of trajectories corresponding to seg points
 
         self.update_t = [0.0] #time of last segment point update
 
@@ -129,7 +129,7 @@ class mt:
 
         self.from_bdry = False #bool for whether it is extension from an MT which hit bdry
         self.from_bdry_2 = False #whether it's actually from bdry
-        self.prev_mt = None #MT index from which it is an exension of
+        self.prev_mt = None #MT index from which it is an extension of
         self.prev_t = None #previous physical trajectory change time if it's a continuation
         self.tip_l = None #tip length
         self.region = None #region MT belongs to
@@ -325,7 +325,7 @@ class mt:
         n = self.path_idx
         if n == len(self.path_dist): #if progressed beyond current info, generate more
             if deflect_on: #need to actually defect
-                if abs(phi0 - pi/2)<vtol or abs(phi0 - 3*pi/2)<vtol: #inital angle already vertical
+                if abs(phi0 - pi/2)<vtol or abs(phi0 - 3*pi/2)<vtol: #initial angle already vertical
                     self.path_angle.append(phi0) #angle same as initial
                     self.path_dist.append(float('inf')) #tip length is treated as infinite before deflection
                 else:
@@ -450,7 +450,7 @@ def dist(p1,p2,square=False):
     p2 : List of floats
         2nd pt.
     square : Bool, optional
-        Decide whether to return sqaure distance. The default is False.
+        Decide whether to return square distance. The default is False.
 
     Returns
     -------
@@ -527,7 +527,7 @@ def compare(mt1,mt2,t,region_list):
         point_1t2 = [] #store their respective collision locations
         point_2t1 = []
 
-        seg1_idx = [] #store indices of colision seg_dist
+        seg1_idx = [] #store indices of collision seg_dist
         seg2_idx = []
         #We now check if mt1 collides w/ any segments of mt2
         for i in range(l2):
@@ -1288,7 +1288,7 @@ class bundle:
         self.seg_dist = [] #for following deflections
         self.traj = [mt.traj[0]]
         self.region = mt.region
-        for i in range(1,len(mt.angle)): #if there are any repitions on the same line, ignore
+        for i in range(1,len(mt.angle)): #if there are any repetitions on the same line, ignore
             special = False #below gets rid of bdry pts which are still needed, need to exempt this case
             if Policy in ['top','bottom', 'left', 'right'] and i == len(mt.angle)-1:
                 special = True
@@ -1523,7 +1523,7 @@ class bundle:
                     assert mt.grow #should be growing, only happens on crossovers
                     current = arc_pos(pt, self.pol, self.seg, self.seg_dist)
                     for j in range(len(self.branch_pt)): #check if it collides w/ other branches
-                        if j != br_idx: #not the newest brach though
+                        if j != br_idx: #not the newest branch though
                             pos = self.branch_pos[j] #position of cross
                             #TODO will we need branch geo soon?
                             # br_pol = self.branch_pol[j] #redefine for OTHER branches
@@ -1605,7 +1605,7 @@ class bundle:
         event_list : List of event class
             Event list.
         recalc_grow: bool
-            Inidicates special case where there is new growth AND tread,
+            Indicates special case where there is new growth AND tread,
             requires two calls. Specific to parallel nucleation.
 
         Returns
@@ -1756,7 +1756,7 @@ class bundle:
                                         pos2 = pos1 + pol1*dt #new arc position
                                         pt2 = arc_pt(pos2, self.seg, self.angle, self.seg_dist)
                                         event_list.append(event(mt1,mt,t+dt,pt2,'1catch2',calc_t=t))
-                        elif mt1.tread_t == t: #invoked at time of tread start, no need to recalulate what happens at plus end, simpler version of above case
+                        elif mt1.tread_t == t: #invoked at time of tread start, no need to recalculate what happens at plus end, simpler version of above case
                             dists1 = mt1.seg_dist
                             total_d1 = 0 #total dist grown for mt1, see if it shrinks before overtake
                             for d in range(len(dists1)):
@@ -2055,11 +2055,11 @@ class bundle:
 
         '''
         if deflect_on: #w deflection,crossovers are always new
-            # assert pt not in self.cross_pt #TODO nearly verical mts raise this exception, need to look into it
+            # assert pt not in self.cross_pt #TODO nearly vertical mts raise this exception, need to look into it
             if pt in self.cross_pt: #overwrite prev crossover instead of adding new
                 pt_i = self.cross_pt.index(pt)
                 assert len(self.cross_mts[pt_i]) == 0 #crossover can exist by cannot be occupied
-                del self.cross_bdl[pt_i] #to be consisdent w/ alg, delelte and re-add rather than reuse current info
+                del self.cross_bdl[pt_i] #to be consisdent w/ alg, delete and re-add rather than reuse current info
                 del self.cross_pt[pt_i]
                 del self.cross_mts[pt_i]
                 del self.cross_pos[pt_i]
@@ -2524,7 +2524,7 @@ class bundle:
             minus += polarity*(t-mt.tread_t)*mt.vt #current minus end
         new_pt_pos = arc_pos(new_pt, self.pol, self.seg, self.seg_dist)
         pt_pos = arc_pos(pt, self.pol, self.seg, self.seg_dist)
-        initial_pos = new_pt_pos #intial pos of step back
+        initial_pos = new_pt_pos #initial pos of step back
         if inverted:
             initial_pos = minus + (pt_pos-minus)/2 #take midpoint so that it's still on the mt
             assert polarity*initial_pos > polarity*minus
@@ -2743,7 +2743,7 @@ def inter_bdry_traj(p, th, region): #calculate intersection of trajectories w/ b
 
     Returns
     -------
-    Float. Distance intersection with boundry
+    Float. Distance intersection with boundary
     Array. Point of intersection
     String. Which wall it hits
     '''
@@ -2765,7 +2765,7 @@ def inter_bdry_traj(p, th, region): #calculate intersection of trajectories w/ b
     if x==xf and y==yf:
         spec_case = True
     assert spec_case is False
-    if x==xi: #starting on left boundry
+    if x==xi: #starting on left boundary
         assert th<pi/2 or th>3*pi/2
         a1 = atan((yf-y)/(xf-xi))
         a4 = atan((xf-xi)/(y-yi)) + 3*pi/2
@@ -2834,7 +2834,7 @@ def inter_bdry_traj(p, th, region): #calculate intersection of trajectories w/ b
             P[0] = xf
             P[1] = tan(th)*(xf-x) + y
             wall ='right'
-    else: #inbetween
+    else: #in between
         a1 = atan((yf-y)/(xf-x))
         a2 = atan((x-xi)/(yf-y)) + pi/2
         a3 = atan((y-yi)/(x-xi)) + pi
@@ -2860,7 +2860,7 @@ def inter_bdry_traj(p, th, region): #calculate intersection of trajectories w/ b
 
 class region_traj:
     '''
-    Trajectories in a given region, along with all interesections w/ other traj. and bdry
+    Trajectories in a given region, along with all intersections w/ other traj. and bdry
     '''
     def __init__(self, mt_list, region):
         '''
@@ -2910,7 +2910,7 @@ class region_traj:
                     k+=1
                 else:
                     mt1.traj[j] = self.angle.index(angle1)
-        #calculate interesections
+        #calculate intersections
         I = len(self.pt)
         for i in range(I): #generate traj intersections between (i,j) for j<=i
             pts = [False]*(i+1) #intersection pts
@@ -3075,7 +3075,7 @@ def inter_r_bdry2(MT, MT_list, bdl_list, region_list, free=False, to_wall = Fals
 
     Returns
     -------
-    Float. Distance intersection with boundry
+    Float. Distance intersection with boundary
     Array. Point of intersection
     String. Which wall it hits
 
@@ -3098,7 +3098,7 @@ def inter_r_bdry2(MT, MT_list, bdl_list, region_list, free=False, to_wall = Fals
     else:
         if abs(region.angle[traj_n] - th) > 1e-13: #not always equal due to +pi then - pi
             print('ERROR',traj_n,region.angle[traj_n] - th, traj_n,region.angle[traj_n],th)
-            assert abs(region.angle[traj_n] - th) < 1e-13 #should not be calculating bdry colisions backwards
+            assert abs(region.angle[traj_n] - th) < 1e-13 #should not be calculating bdry collisions backwards
         P1 = region.bdry_pt[traj_n] #intersection point with bdry
         P = [P1[0],P1[1]]
         wall = region.bdry_wall[traj_n]
@@ -3184,7 +3184,7 @@ def inter2(p1,p2,theta1,theta2,traj1_n,traj2_n,r_idx,region_list):
             return(False, None, None)
 
 def bdl_exist(bdl, bdl_list):
-    remain = False #whether there are mts remaning on ANY ext/prev bdl
+    remain = False #whether there are mts remaining on ANY ext/prev bdl
     if len(bdl.mts) != 0: #not dead
         remain = True
     else: #no mts on bdl anymore, can erase if ext/prev also don't have any
@@ -3349,7 +3349,7 @@ def compare_meta(pt0, th, mt2, t, intersections):
 
         point_1t2 = [] #store their respective collision locations
 
-        seg2_idx = [] #store indices of colision seg_dist
+        seg2_idx = [] #store indices of collision seg_dist
         #We now check if mt1 collides w/ any segments of mt2
         for i in range(l2):
             p2 = seg2[i] #point traj to be collided with
@@ -3549,7 +3549,7 @@ def compare_meta(pt0, th, mt2, t, intersections):
 def find_meta_col(pt, th, mt_list, t, intersections):
     #determine all collisions w/ meta traj
     L = len(mt_list)
-    col_list = [] #list of collsion results and mt numbers
+    col_list = [] #list of collision results and mt numbers
     for i in range(L): #find whether meta traj collides w/ mts in region
         mt2 = mt_list[i]
         col_res = compare_meta(pt, th, mt2, t, intersections)

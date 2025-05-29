@@ -166,7 +166,7 @@ def sim_integrate(l_start,l_end,del_l2):
         tip_l.append(tip_lf) #record the tip length
         l0 = tip_lf - s
     #add last point
-    # tip_lf = l_end-pos[-1] #lenghth of tip from last anchoring
+    # tip_lf = l_end-pos[-1] #length of tip from last anchoring
     # pos.append(l_end) #append values of latest anchor
     # tip_l.append(tip_lf) #new tip length is the difference
     # L.append(l_end)

@@ -70,7 +70,7 @@ def plot_snap(mt_list, t,k,dest='./plots3/',save=True, region=False, nodes=True,
                     plt.plot(x_segp,y_segp,color=green,linewidth=0.5, alpha = 0.5) #started to shrink
             else:
                 if nodes: #plot the vertices
-                    plt.scatter([x_seg[0]],[y_seg[0]], s=.5,color='purple') #yellow points are dissapeared MTs
+                    plt.scatter([x_seg[0]],[y_seg[0]], s=.5,color='purple') #yellow points are disappeared MTs
         else: #if it's continuing to grow at this point in time
             if mt_list[i].exist:
                 if mt_list[i].grow: #growing

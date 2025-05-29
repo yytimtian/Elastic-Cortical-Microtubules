@@ -4,7 +4,7 @@
 Created on Wed Mar  3 23:12:47 2021
 
 @author: tim
-Simulation algorthims.
+Simulation algorithms.
 Started Jan 16. Same as sim_algs3, but attempted with fixed regions.
 All other scripts remain with the same name, but will have new functions for this.
 Simulation parameters are GLOBAL imported from parameters.py.
@@ -332,7 +332,7 @@ def update_event_list(MT_list,mt_sublist,event_list,bdl_list,branch_list,region_
     MT_list : List of MT objects
     pair_list : List of tuples of pairwise MT indices. Each tuple represents MTs to be compared
     t: current time
-    pevet_list: list of previous events which occured
+    pevet_list: list of previous events which occurred
     Returns
     -------
     Collision policy
@@ -470,7 +470,7 @@ def update_event_list(MT_list,mt_sublist,event_list,bdl_list,branch_list,region_
                 # event_list.append(event(MTp,mt_none,disap_t,None,'disap',calc_t=t))
             else: #if last one disappeared, no continuation
                 event_list_R1[:] = [x for x in event_list_R1 if (x.mt1_n != last_result and x.mt2_n != last_result)]#discard all invalid events
-                l = 0 #no new comparisons to be made with non-existant MT
+                l = 0 #no new comparisons to be made with non-existent MT
                 assert MT_list[l_idx].exist==False
                 if not MT_list[l_idx].hit_bdry:
                     del_idx = global_prop.shrink.index(MT_list[l_idx].number) #delete from shrhinking mt list
@@ -520,7 +520,7 @@ def update_event_list(MT_list,mt_sublist,event_list,bdl_list,branch_list,region_
             else: #if last one disappeared, no continuation
                 sort_regions = [MT_list[l_idx].region]
                 event_list_R1[:] = [x for x in event_list_R1 if (x.mt1_n != last_result and x.mt2_n != last_result)]#discard all invalid events
-                l = 0 #no new comparisons to be made with non-existant MT
+                l = 0 #no new comparisons to be made with non-existent MT
                 assert MT_list[l_idx].exist==False
                 del_idx = global_prop.shrink.index(MT_list[l_idx].number) #delete from shrhinking mt list
                 del global_prop.shrink[del_idx]
@@ -529,7 +529,7 @@ def update_event_list(MT_list,mt_sublist,event_list,bdl_list,branch_list,region_
             mt1, mt2 = MT_list[pevent.mt1_n], None #mt2 might not exist for catas
             if pevent.mt2_n is not None: #if mt2 does exist
                 mt2 = MT_list[pevent.mt2_n]
-            if mt1.number != last_result and policy != 'freed_rescue': #need to switch if '2hit1', freed rescue is excempt
+            if mt1.number != last_result and policy != 'freed_rescue': #need to switch if '2hit1', freed rescue is exempt
                 mt1, mt2 = MT_list[pevent.mt2_n], MT_list[pevent.mt1_n]
             bdl1, bdl2 = None, None #bdls might not exist for catas
             if policy not in ['catas','follow_br','freed_br','freed_rescue']: #bdl2 is None for these
@@ -779,7 +779,7 @@ def update_event_list(MT_list,mt_sublist,event_list,bdl_list,branch_list,region_
                 event_list_R1[:] = [x for x in event_list_R1 if x.pt!= pevent.pt] #get rid of all events including this pt
                 #need to recalculate intersections of mts on bdl1 w/ bdl2, no longer connected
                 bdl1, bdl2 = bdl_list[pevent.bdl1], bdl_list[pevent.bdl2]
-                mts1 = [x for x in bdl1.mts if x != last_result] #mts on bdl1 exluding newest
+                mts1 = [x for x in bdl1.mts if x != last_result] #mts on bdl1 excluding newest
                 pair_list = list(it.product(bdl2.mts,mts1)) #pair list
                 l = len(pair_list)
             #no mts physically changed, so no recalculations needed
@@ -955,7 +955,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
     policy : what type of collision event
     dists : event time
     pt : point of intersection
-    idx : tuple of idices if two MTs collide, single index if bdry event
+    idx : tuple of indices if two MTs collide, single index if bdry event
     t : current time
 
     Returns
@@ -1352,7 +1352,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
                 else:
                     #TODO this is physically like a crossover pt but I've coded it as a branch pt
                     #if I want to consider severing, need to modify this
-                    event.policy = 'cross_br' #cross over like nothing happend
+                    event.policy = 'cross_br' #cross over like nothing happened
             else: #TODO nucleated branch case requires more careful consideration, especial when it doesn't have mts that act as branches on the other bdl
                 event.policy = 'follow_br'
                 #edit old and create new MT
@@ -1569,7 +1569,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
                     if br_focus.nucleated and br_focus.branch_in: #ref bdl is from branch nucleation
                         cross_bool = True
                 if cross_bool: 
-                    #TODO this if/else statement seems unnessary, but keeping to for readability
+                    #TODO this if/else statement seems unnecessary, but keeping to for readability
                     mts = bdl1.mt_overlap(mt_list, pt, dists, mt2_n = None, mt_none = [mt1.number],branch_cross = True)
                     if len(mts) == 0:
                         if abs(mt1.angle[-1] - pi/2)<vtol or abs(mt1.angle[-1] - 3*pi/2)<vtol:
@@ -1751,7 +1751,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
     elif policy =='disap': #mt has disappeared
             mt_idx1 = idxs
             mt1 = mt_list[mt_idx1]
-            mt1.exist = False #has disapeared
+            mt1.exist = False #has disappeared
             if mt1.bdl is not None: #if mt1 was part of bdl, erase from bdl
                 bdl = bdl_list[mt1.bdl]
                 if mt1.from_bdry and not mt1.tread: #if it's an extension, must update previous MT
@@ -1795,7 +1795,7 @@ def update(mt_list,mt_sublist,bdl_list,branch_list,region_list,event_list,event,
     elif policy =='disap_tread': #mt has disappeared, tread
             mt_idx1 = idxs
             mt1 = mt_list[mt_idx1]
-            mt1.exist = False #has disapeared
+            mt1.exist = False #has disappeared
             if mt1.bdl is not None: #if mt1 was part of bdl, erase from bdl
                 bdl = bdl_list[mt1.bdl]
                 if mt1.hit_bdry: #if it has extension, must update extension MT
@@ -2414,7 +2414,7 @@ def purge_list2(mt_list1,bdl_list1,branch_list1,event_list1,last_result1,region_
         bdl = bdl_list1[b]
         if bdl.number not in dead_bdl_list: #could be already added
             temp_add = [] #list of dead bdls to add
-            remain = False #whether there are mts remaning on ANY ext/prev bdl
+            remain = False #whether there are mts remaining on ANY ext/prev bdl
             if len(bdl.mts) != 0: #not dead
                 remain = True
             else: #no mts on bdl anymore, can erase if ext/prev also don't have any
@@ -2483,7 +2483,7 @@ def purge_list2(mt_list1,bdl_list1,branch_list1,event_list1,last_result1,region_
         new_int = []
         for r in range(k): #empty array of intersections
             new_int.append([False]*(r+1))
-        count = 0 #count how many existant traj pairs were found
+        count = 0 #count how many existent traj pairs were found
         for r1 in range(L): #fill array
             for r2 in range(r1+1):
                 i1, i2 = region_map[i][r1], region_map[i][r2] #convert to new labels
@@ -2678,7 +2678,7 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
     N = 1 #number of initial MTs
     #create lists, then fill
     mt_list = []
-    mt_sublist = [] #seperate list that is divided by region, for quicker search
+    mt_sublist = [] #separate list that is divided by region, for quicker search
     bdl_list = []
     region_list = []
     branch_list = [branch(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, special=True)]
@@ -2776,7 +2776,7 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
                 order_regions = [] #mt order info, partitioned by region
                 for reg in range(grid_l*grid_w):
                     order_regions.append(order_hist(mt_sublist[reg],t2))
-                order.append(order_regions) #store, info will be innacurate to a < single tubulin unit length
+                order.append(order_regions) #store, info will be inaccurate to a < single tubulin unit length
                 order_t.append(order_snap[order_idx])
                 order_idx+=1
         tau = t*conv/(60*60)
@@ -2943,7 +2943,7 @@ def rerun(seed, start_idx, final_idx, save_path, verbose = False, plot = False, 
                 order_regions = [] #mt order info, partitioned by region
                 for reg in range(grid_l*grid_w):
                     order_regions.append(order_hist(mt_sublist[reg],t2))
-                order.append(order_regions) #store, info will be innacurate to a < single tubilin unit length
+                order.append(order_regions) #store, info will be inaccurate to a < single tubilin unit length
                 order_t.append(order_snap[order_idx])
                 order_idx+=1
         tau = t*conv/(60*60)
@@ -3158,7 +3158,7 @@ if __name__ == '__main__':
     # mt_list[0].hit_bdry = False
     # res = order_hist(mt_list,3+2.25/2)
     # sys.exit()
-    # print('Troubleshoot settings. Must change: paramters, grids, plotting')
+    # print('Troubleshoot settings. Must change: parameters, grids, plotting')
     # print('Also check nucleation probabilities')
     fresh_start = True
     if fresh_start:
@@ -3166,7 +3166,7 @@ if __name__ == '__main__':
         rnd.seed(seed)
         N = 1#number of initial MTs
         mt_list = []
-        mt_sublist = [] #seperate list that is divided by region, for quicker search
+        mt_sublist = [] #separate list that is divided by region, for quicker search
         bdl_list = []
         region_list = []
         branch_list = [branch(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, special=True)]
@@ -3367,7 +3367,7 @@ if __name__ == '__main__':
     else: #start from checkpoint
         seed=97
         mt_list = []
-        mt_sublist = [] #seperate list that is divided by region, for quicker search
+        mt_sublist = [] #separate list that is divided by region, for quicker search
         bdl_list = []
         region_list = []
         branch_list = []

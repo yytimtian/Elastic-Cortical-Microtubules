@@ -65,6 +65,9 @@ def main_sim(seed, start_idx, final_idx, save_path, verbose, plot, trouble_bool)
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 6:
+        raise RuntimeError("Script needs additional inputs see help in file")
+
     #these will be used a arguments for the simulation function
     date = str(sys.argv[1]) #unlike multprocessing script, bash inputs the date - not python
     path = '../'+date+'/'

@@ -3215,7 +3215,7 @@ def earliest_event(mt, t, mt_list, bdl_list, event_list):
     #     root_mt = mt_list[new_no]
     # mt_event_list = [e for e in event_list if e.t != t]
     comparison_events = []
-    for i in range(len(event_list)): #assemble event list into 1D array rather than ND where N is number of regions
+    for i in range(len(event_list)): #assemble event list into 1D array rather than N-D where N is number of regions
         comparison_events += event_list[i]
     comparison_events.sort(key=lambda x: x.t)
     later_t = [e.t for e in comparison_events if e.t > t]

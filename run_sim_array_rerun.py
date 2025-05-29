@@ -14,13 +14,6 @@ import sys
 import logging
 from parameters import verbose, plot
 
-#these will be used a arguments for the simulation function
-date = str(sys.argv[1]) #unlike multprocessing script, bash inputs the date - not python
-path = '../'+date+'/'
-seed = int(sys.argv[2]) #bash also inputs seed
-start_idx = int(sys.argv[3]) #starting index
-final_idx = int(sys.argv[4])
-trouble_bool = (str(sys.argv[5])=='True') #whether to save more checkpoints
 
 def main_sim(seed, start_idx, final_idx, save_path, verbose, plot, trouble_bool): #for handling errors
     '''
@@ -70,7 +63,17 @@ def main_sim(seed, start_idx, final_idx, save_path, verbose, plot, trouble_bool)
         logging.basicConfig(level=logging.DEBUG, filename=path+'ERROR_seed'+str(seed)+'.log')
         logging.exception("Failed at seed " + str(seed)+', time (hr) '+str(tau))
 
-#create dir for results
-print('Simulation started for ' + path,'\n')
-#call simulation
-main_sim(seed, start_idx, final_idx, path, verbose, plot, trouble_bool)
+
+if __name__ == "__main__":
+    #these will be used a arguments for the simulation function
+    date = str(sys.argv[1]) #unlike multprocessing script, bash inputs the date - not python
+    path = '../'+date+'/'
+    seed = int(sys.argv[2]) #bash also inputs seed
+    start_idx = int(sys.argv[3]) #starting index
+    final_idx = int(sys.argv[4])
+    trouble_bool = (str(sys.argv[5])=='True') #whether to save more checkpoints
+
+    #create dir for results
+    print('Simulation started for ' + path,'\n')
+    #call simulation
+    main_sim(seed, start_idx, final_idx, path, verbose, plot, trouble_bool)

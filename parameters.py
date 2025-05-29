@@ -7,7 +7,7 @@ For determining the parameters of the simulation
 """
 import numpy as np
 from math import pi, sin
-deflect_on = True #whether to turn on delection (False <-> k_on = infty; ignores k_on, del_l2 below) ALWAYS ON, CHANGE vtol for this!! TODO:DELETE
+deflect_on = True #whether to turn on deflection (False <-> k_on = infty; ignores k_on, del_l2 below) ALWAYS ON, CHANGE vtol for this!! TODO:DELETE
 global R, v_g, v_s, conv, f_gp, f_gs, f_pg, f_ps, f_sg, f_sg, f_sp, r_c, r_r, r_n, v_t, L_y0, l_grid
 
 #checkpoint and data analysis info

@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-@author: tim
 
-Main simulation script, main_sim tries the simulation function.
-To run, type into command line:
-python date seed start_idx final_idx trouble_bool
-See below for description for each argument.
+"""Main simulation script.
+
+There are other parameters set in the `parameters.py` file.
 """
-from sim_algs_fixed_region import simulate, rerun #this fn calls various others in the dependencies
+
+import argparse
+import logging
 import sys
 # import inspect
-import logging
+
+from sim_algs_fixed_region import simulate, rerun #this fn calls various others in the dependencies
 from parameters import verbose, plot
 
-#these will be used a arguments for the simulation function
-date = str(sys.argv[1]) #unlike multprocessing script, bash inputs the date - not python
-path = '../'+date+'/'
-seed = int(sys.argv[2]) #bash also inputs seed
-start_idx = int(sys.argv[3]) #starting index
-final_idx = int(sys.argv[4])
-trouble_bool = (str(sys.argv[5])=='True') #whether to save more checkpoints
+__version__ = "0.0.1"
+
 
 def main_sim(seed, start_idx, final_idx, save_path, verbose, plot, trouble_bool): #for handling errors
     '''
@@ -34,7 +29,8 @@ def main_sim(seed, start_idx, final_idx, save_path, verbose, plot, trouble_bool)
     seed : Int
         Random number generator seed.
     start_idx : Int
-        Starting hour (index starts at 0).
+        Starting hour (index starts at 0).  A special value of -1 starts
+        a new simulation run, rather than continuing an old one.
     final_idx : Int
         Final hour (when the simulation exits).
     save_path : String
@@ -70,7 +66,56 @@ def main_sim(seed, start_idx, final_idx, save_path, verbose, plot, trouble_bool)
         logging.basicConfig(level=logging.DEBUG, filename=path+'ERROR_seed'+str(seed)+'.log')
         logging.exception("Failed at seed " + str(seed)+', time (hr) '+str(tau))
 
-#create dir for results
-print('Simulation started for ' + path,'\n')
-#call simulation
-main_sim(seed, start_idx, final_idx, path, verbose, plot, trouble_bool)
+
+def get_parser() -> argparse.ArgumentParser:
+    """Build the command-line parser."""
+    parser = argparse.ArgumentParser(
+        description=__doc__.split("\n")[0],
+        epilog="\n".join(__doc__.split("\n")[1:]),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s " + __version__
+    )
+
+    # TODO: why is this called "date"?
+    parser.add_argument("date", type=str, help="""
+        Used to construct a directory to store the simulation results.
+        Different simulations should a different value.
+    """)
+    parser.add_argument("seed", type=int, help="""
+        Integer seed for random number generators.  In theory using the
+        same seed should produce the same results, although this is not
+        yet stable between software versions, Python versions, OS
+        versions, architectures, etc.
+    """)
+    parser.add_argument("start_idx", type=int, help="""
+        Starting hour (index starts at 0).
+        A special value of -1 starts a new simulation run, rather than
+        continuing an old one.
+    """)
+    parser.add_argument("final_idx", type=int, help="""
+        Final hour (when the simulation exits).
+    """)
+    parser.add_argument(
+        "--trouble",
+        default=None,
+        action="store_true",
+        help="Save additional checkpoints, for example for debugging."
+    )
+    return parser
+
+
+if __name__ == "__main__":
+    args = get_parser().parse_args()
+    date = args.date
+    path = '../'+date+'/'
+    seed = args.seed
+    start_idx = args.start_idx
+    final_idx = args.final_idx
+    trouble_bool = args.trouble
+
+    #create dir for results
+    print('Simulation started for ' + path,'\n')
+    #call simulation
+    main_sim(seed, start_idx, final_idx, path, verbose, plot, trouble_bool)

@@ -65,6 +65,9 @@ class global_prop:
         # self.mtlen_cont = [] #mt lengths of free mts that are hit
         # self.mtlen_cont_t = [] #corresponding times
         # self.init_angle_cont = [] #initial angles for the above
+    def record_stats(self):
+        tot_mt = len(self.grow_mt) + len(self.shrink)
+        return(tot_mt, self.nuc)
     def find_angle_part(self, angle):#find angle partition index for a given angle
         new_angle = map_angle(angle) #map to [0,pi/2]
         idx = -1
@@ -2732,6 +2735,7 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
     # time_len = len(time_snap)
     # order_snap = np.linspace(0,final_hr, 10)
     # order_snap = np.delete(order_snap, 0)
+    global_array = []
     order = [] #store order param info here
     order_t = [] #and time
     order_idx = 0
@@ -2764,6 +2768,7 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
             for reg in range(grid_l*grid_w):
                 order_regions.append(order_hist(mt_sublist[reg],t2))
             order.append(order_regions) #store
+            global_array.append(global_p.record_stats())
             order_t.append(order_snap[order_idx])
             order_idx+=1
             check_again = False #info already recorded, no need to check again
@@ -2777,6 +2782,7 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
                 for reg in range(grid_l*grid_w):
                     order_regions.append(order_hist(mt_sublist[reg],t2))
                 order.append(order_regions) #store, info will be innacurate to a < single tubulin unit length
+                global_array.append(global_p.record_stats())
                 order_t.append(order_snap[order_idx])
                 order_idx+=1
         tau = t*conv/(60*60)
@@ -2827,8 +2833,9 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
                     #store other global measurements
                     file3 = save_path+'globalp_seed'+str(seed)+'_'+idx_string
                     pickle_out = open(file3+'.pickle','wb')
-                    pickle.dump(global_p,pickle_out,protocol=pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(global_array,pickle_out,protocol=pickle.HIGHEST_PROTOCOL)
                     pickle_out.close()
+                    global_array = []
                 global_p.mtlen, global_p.mtlen_t, global_p.init_angle = [], [], [] #empty lists
                 #continue
                 snap_idx +=1
@@ -2851,7 +2858,7 @@ def simulate(seed, final_idx, save_path, verbose = False, plot = True, troublesh
     #store other global measurements
     file3 = save_path+'globalp_seed'+str(seed)+'_'+str(snap_idx)+'idx'
     pickle_out = open(file3+'.pickle','wb')
-    pickle.dump(global_p,pickle_out,protocol=pickle.HIGHEST_PROTOCOL) 
+    pickle.dump(global_array,pickle_out,protocol=pickle.HIGHEST_PROTOCOL) 
     pickle_out.close()
     if plot:
         plot_snap(mt_list,t,i,save_path+str(snap_idx),save=save_file,region=False, nodes=False)
@@ -2900,6 +2907,7 @@ def rerun(seed, start_idx, final_idx, save_path, verbose = False, plot = False, 
     # orderp = pickle.load(order_pick)
     # order_pick.close()
     order = [] #store order param info here
+    global_array = []
     order_t = [] #and time
     order_idx = [i for i,t in enumerate(order_snap) if t<= tau][-1] + 1 #index in order_snap for this time
     #
@@ -2931,6 +2939,7 @@ def rerun(seed, start_idx, final_idx, save_path, verbose = False, plot = False, 
             for reg in range(grid_l*grid_w):
                 order_regions.append(order_hist(mt_sublist[reg],t2))
             order.append(order_regions) #store
+            global_array.append(global_p.record_stats())
             order_t.append(order_snap[order_idx])
             order_idx+=1
             check_again = False #info already recorded, no need to check again
@@ -2944,6 +2953,7 @@ def rerun(seed, start_idx, final_idx, save_path, verbose = False, plot = False, 
                 for reg in range(grid_l*grid_w):
                     order_regions.append(order_hist(mt_sublist[reg],t2))
                 order.append(order_regions) #store, info will be innacurate to a < single tubilin unit length
+                global_array.append(global_p.record_stats())
                 order_t.append(order_snap[order_idx])
                 order_idx+=1
         tau = t*conv/(60*60)
@@ -2994,8 +3004,9 @@ def rerun(seed, start_idx, final_idx, save_path, verbose = False, plot = False, 
                     #store other global measurements
                     file3 = save_path+'globalp_seed'+str(seed)+'_'+idx_string 
                     pickle_out = open(file3+'.pickle','wb')
-                    pickle.dump(global_p,pickle_out,protocol=pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(global_array,pickle_out,protocol=pickle.HIGHEST_PROTOCOL)
                     pickle_out.close()
+                    global_array = []
                 global_p.mtlen, global_p.mtlen_t, global_p.init_angle = [], [], [] #empty lists
                 #continue
                 snap_idx +=1
@@ -3018,7 +3029,7 @@ def rerun(seed, start_idx, final_idx, save_path, verbose = False, plot = False, 
     #store other global measurements
     file3 = save_path+'globalp_seed'+str(seed)+'_'+str(snap_idx)+'idx'
     pickle_out = open(file3+'.pickle','wb')
-    pickle.dump(global_p,pickle_out,protocol=pickle.HIGHEST_PROTOCOL) 
+    pickle.dump(global_array,pickle_out,protocol=pickle.HIGHEST_PROTOCOL) 
     pickle_out.close()
     if plot:
         plot_snap(mt_list,t,i,save_path+str(snap_idx),save=save_file,region=False, nodes=False)
@@ -3238,8 +3249,9 @@ if __name__ == '__main__':
         unique_horiz_crossing = []
         S2 = []
         from domain_analysis import count_crossings_sample, count_crossings
-        while t*conv/(60*60) < final_hr:
+        # while t*conv/(60*60) < final_hr:
         # while t < 0.9518263249094895:
+        while i<2000:
             i+=1
             if i%50000==0:
                 tf = time()
@@ -3265,6 +3277,8 @@ if __name__ == '__main__':
             #         if Result.policy in ['branched_nucleation', 'unbound_nucleation', 'parallel_nucleation']:
             #             pt_list.append(Result.prev_pt)
             #         plot_snap(list1,t,i,'.',save=False,region=True, nodes=False, show=True, color=True, result = Result, plot_pts = pt_list, plot_region=rr)
+            if i%10 == 0 and i>1:
+                plot_snap(mt_list,t,i,'.',save=False,region=True, nodes=False, show=True, color=True, result = Result)
             Result_tuple = update_event_list(mt_list,mt_sublist,event_list,bdl_list,branch_list,region_list,t,global_p, last_result, result2 = Result_tuple)
             Result = Result_tuple[1]
             #store order param at select times BEFORE the next update
